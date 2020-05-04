@@ -2,218 +2,222 @@
 class TextformatterTable extends Textformatter implements ConfigurableModule {
 
 
-	/**
-	 * Default configuration values
-	 *
-	 * @var array
-	 *
-	 */
-	protected static $configDefaults = array(
-		'openTag' => 'TABLE--',
-		'closeTag' => '--TABLE',
-		'thSign' => 'TH--',
-		'extSign' => 'EXT--',
-		'type' => 'table',
-		'className' => ''
-	);
+    /**
+     * Default configuration values
+     *
+     * @var array
+     *
+     */
+    protected static $configDefaults = array(
+        'openTag' => 'TABLE--',
+        'closeTag' => '--TABLE',
+        'thSign' => 'TH--',
+        'extSign' => 'EXT--',
+        'type' => 'table',
+        'className' => ''
+    );
 
-	/**
-	 * Set our configuration defaults
-	 *
-	 */
-	public function __construct() {
-		foreach (self::$configDefaults as $key => $value) {
-			$this->set($key, $value);
-		}
-	}
+    /**
+     * Set our configuration defaults
+     *
+     */
+    public function __construct() {
+        foreach (self::$configDefaults as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
 
-	public static function getModuleInfo() {
-		return array(
-			'title' => 'Simple Tables Text Formatter',
-			'summary' => 'Replaces CSV-Like strings with tables',
-			'version' => '1',
-			'author' => 'Daniel Pichler',
-			'icon' => 'table',
-			'requires' => array('ProcessWire>=3.0.0', 'PHP>=7.2.0')
-		);
-	}
+    public static function getModuleInfo() {
+        return array(
+            'title' => 'Simple Tables Text Formatter',
+            'summary' => 'Replaces CSV-Like strings with tables',
+            'version' => '1',
+            'author' => 'Daniel Pichler',
+            'icon' => 'table',
+            'requires' => array('ProcessWire>=3.0.0', 'PHP>=7.2.0')
+        );
+    }
 
-	/**
-	 * Module configuration screen
-	 *
-	 * @param array $data
-	 * @return InputfieldWrapper
-	 *
-	 */
-	public function getModuleConfigInputfields(array $data) {
-		/** @var Modules $modules */
-		$modules = $this->wire('modules');
-		/** @var WireInput $input */
-		$input = $this->wire('input');
+    /**
+     * Module configuration screen
+     *
+     * @param array $data
+     * @return InputfieldWrapper
+     *
+     */
+    public function getModuleConfigInputfields(array $data) {
+        /** @var Modules $modules */
+        $modules = $this->wire('modules');
 
-		foreach (self::$configDefaults as $key => $value) {
-			if (!isset($data[$key])) $data[$key] = $value;
-		}
+        foreach (self::$configDefaults as $key => $value) {
+            if (!isset($data[$key])) $data[$key] = $value;
+        }
 
-		unset($data['cacheClear']);
-		$inputfields = new InputfieldWrapper();
+        unset($data['cacheClear']);
+        $inputfields = new InputfieldWrapper();
 
 
-		$f = $modules->get('InputfieldText');
-		$f->attr('name', 'openTag');
-		$f->attr('value', $data['openTag']);
-		$f->label = __('Table begin');
-		$f->columnWidth = 25;
-		$inputfields->add($f);
+        $f = $modules->get('InputfieldText');
+        $f->attr('name', 'openTag');
+        $f->attr('value', $data['openTag']);
+        $f->label = __('Table begin');
+        $f->columnWidth = 25;
+        $inputfields->add($f);
 
-		$f = $modules->get('InputfieldText');
-		$f->attr('name', 'closeTag');
-		$f->attr('value', $data['closeTag']);
-		$f->label = __('Table end');
-		$f->columnWidth = 25;
-		$inputfields->add($f);
+        $f = $modules->get('InputfieldText');
+        $f->attr('name', 'closeTag');
+        $f->attr('value', $data['closeTag']);
+        $f->label = __('Table end');
+        $f->columnWidth = 25;
+        $inputfields->add($f);
 
-		$f = $modules->get('InputfieldText');
-		$f->attr('name', 'thSign');
-		$f->attr('value', $data['thSign']);
-		$f->label = __('Heading row');
-		$f->columnWidth = 25;
-		$inputfields->add($f);
+        $f = $modules->get('InputfieldText');
+        $f->attr('name', 'thSign');
+        $f->attr('value', $data['thSign']);
+        $f->label = __('Heading row');
+        $f->columnWidth = 25;
+        $inputfields->add($f);
 
-		$f = $modules->get('InputfieldText');
-		$f->attr('name', 'extSign');
-		$f->attr('value', $data['extSign']);
-		$f->label = __('External table');
-		$f->columnWidth = 25;
-		$inputfields->add($f);
+        $f = $modules->get('InputfieldText');
+        $f->attr('name', 'extSign');
+        $f->attr('value', $data['extSign']);
+        $f->label = __('External table');
+        $f->columnWidth = 25;
+        $inputfields->add($f);
 
-		$f = $modules->get('InputfieldText');
-		$f->attr('name', 'className');
-		$f->attr('value', $data['className']);
-		$f->label = __('Table CSS-class');
-		$f->icon = 'css3';
-		$f->columnWidth = 25;
-		$inputfields->add($f);
+        $f = $modules->get('InputfieldText');
+        $f->attr('name', 'className');
+        $f->attr('value', $data['className']);
+        $f->label = __('Table CSS-class');
+        $f->icon = 'css3';
+        $f->columnWidth = 25;
+        $inputfields->add($f);
 
-		$f = $modules->get('InputfieldRadios');
-		$f->attr('name', 'type');
-		$f->attr('value', $data['type']);
-		$f->label = __('Table type');
-		$f->options = array('table' => 'Traditional HTML-Table', 'div' => 'DIVs which can be styled with display:table;');
-		$f->columnWidth = 75;
-		$inputfields->add($f);
+        $f = $modules->get('InputfieldRadios');
+        $f->attr('name', 'type');
+        $f->attr('value', $data['type']);
+        $f->label = __('Table type');
+        $f->options = array('table' => 'Traditional HTML-Table', 'div' => 'DIVs which can be styled with display:table;');
+        $f->columnWidth = 75;
+        $inputfields->add($f);
 
 
-		return $inputfields;
-	}
+        return $inputfields;
+    }
 
-	public function formatValue(Page $page, Field $field, &$str) {
-		#parent::formatValue($page, $field, $value); // TODO: Change the autogenerated stub
+    public function formatValue(Page $page, Field $field, &$str) {
+        #parent::formatValue($page, $field, $value); // TODO: Change the autogenerated stub
 
-		//We need at least one Open and one Close tag to proceed
-		if (strpos($str, $this->openTag) === false) return;
-		if (strpos($str, $this->closeTag) === false) return;
+        //We need at least one Open and one Close tag to proceed
+        if (strpos($str, $this->openTag) === false) return;
+        if (strpos($str, $this->closeTag) === false) return;
 
-		//$match[0] will be the found content including delimiters
-		//$match[1] will be the found content without delimiters
-		#old if (!preg_match_all('/TABLE--(.*?)--TABLE/s', $str, $match)) return;
-		$pattern = '!' .
-			preg_quote($this->openTag, '!') . // open tag
-			'(.+?)' .                    // tag contents
-			preg_quote($this->closeTag, '!') .// close tag
-			'!s';
-		if (!preg_match_all($pattern, $str, $match)) return;
+        //$match[0] will be the found content including delimiters
+        //$match[1] will be the found content without delimiters
+        #old if (!preg_match_all('/TABLE--(.*?)--TABLE/s', $str, $match)) return;
+        $pattern = '!' .
+            preg_quote($this->openTag, '!') . // open tag
+            '(.+?)' .                    // tag contents
+            preg_quote($this->closeTag, '!') .// close tag
+            '!s';
+        if (!preg_match_all($pattern, $str, $match)) return;
 
-		#var_dump($match);
+        #var_dump($match);
 
-		foreach ($match[1] as $mnum => $table) {
-			//Should we get the table from an external page/repeater?
-			if (strpos($table, 'EXT--') !== false) {
-				$id = str_replace('EXT--', '', $table);
-				$tp = $this->pages->get($id);
-				if ($tp->isHidden() || $tp->isUnpublished()) {
-					$this->wire('log')->save('simpletables', 'included unpublished table ' . $id . ' on ' . $page->id);
-					break;
-				}
-				$table = str_replace(['<p>', '</p>'], '', $tp->getUnformatted('body'));
-			}
-			$cells = array();
-			$rows = explode('<br />', $table);
-			$th = false;
-			foreach ($rows as $num => $row) {
-				//Should the first line be a header?
-				if (strpos($row, $this->thSign) !== false) {
-					$th = true;
-					$row = str_replace($this->thSign, '', $row);
-				}
-				$cells[$num] = array_map('trim', explode('|', $row));
-			}
-			#var_dump($cells);
+        foreach ($match[1] as $mnum => $table) {
+            //Should we get the table from an external page/repeater?
+            if (strpos($table, 'EXT--') !== false) {
+                $id = str_replace('EXT--', '', $table);
+                $tp = $this->pages->get($id);
+                if ($tp->isHidden() || $tp->isUnpublished()) {
+                    $this->wire('log')->save('simpletables', 'included unpublished table ' . $id . ' on ' . $page->id);
+                    break;
+                }
+                //Find the textarea
+                foreach ($tp->getFields() as $field) {
+                    if ($field->type == 'FieldtypeTextarea') {
+                        $table = str_replace(['<p>', '</p>'], '', $tp->getUnformatted($field->name));
+                        break;
+                    }
+                }
+            }
+            $cells = array();
+            $rows = explode('<br />', $table);
+            $th = false;
+            foreach ($rows as $num => $row) {
+                //Should the first line be a header?
+                if (strpos($row, $this->thSign) !== false) {
+                    $th = true;
+                    $row = str_replace($this->thSign, '', $row);
+                }
+                $cells[$num] = array_map('trim', explode('|', $row));
+            }
+            #var_dump($cells);
 
-			if ($this->type == 'table')
-				$out[$mnum] = $this->table_table($cells, $th);
-			elseif ($this->type == 'div')
-				$out[$mnum] = $this->table_div($cells, $th);
-		}
-		#var_dump($out);
-		$str = str_replace($match[0], $out, $str);
-		return;
-	}
+            if ($this->type == 'table')
+                $out[$mnum] = $this->table_table($cells, $th);
+            elseif ($this->type == 'div')
+                $out[$mnum] = $this->table_div($cells, $th);
+        }
+        #var_dump($out);
+        $str = str_replace($match[0], $out, $str);
+        return;
+    }
 
-	private function table_table(array $cells, ?bool $th = false) {
-		//Table rows
-		//$numrows = count($cells);
-		//Table columns
-		$numcols = count($cells[0]) > 1 ? count($cells[0]) : count($cells[1]);
-		if ($this->className)
-			$class = " class='{$this->className}'";
-		$out = "<table{$class}>\n";
-		$rn = 0;
-		foreach ($cells as $row => $cell) {
-			if (count($cell) == 1) {
-				$out .= "<caption>{$cell[0]}</caption>";
-				$rn = 1;
-			} else {
-				for ($i = 0; $i < $numcols; $i++) {
-					$td = 'td';
-					if ($th)
-						$td = ($row == $rn ? 'th' : 'td');
-					$out .= ($i == 0 ? '<tr>' : '') . "<{$td}>{$cell[$i]}</{$td}>";
-					if ($i == $numcols - 1)
-						$out .= "</tr>\n";
-				}
-			}
-		}
-		$out .= "</table>\n";
-		return $out;
-	}
+    private function table_table(array $cells, ?bool $th = false) {
+        //Table rows
+        //$numrows = count($cells);
+        //Table columns
+        $numcols = count($cells[0]) > 1 ? count($cells[0]) : count($cells[1]);
+        if ($this->className)
+            $class = " class='{$this->className}'";
+        $out = "<table{$class}>\n";
+        $rn = 0;
+        foreach ($cells as $row => $cell) {
+            if (count($cell) == 1) {
+                $out .= "<caption>{$cell[0]}</caption>";
+                $rn = 1;
+            } else {
+                for ($i = 0; $i < $numcols; $i++) {
+                    $td = 'td';
+                    if ($th)
+                        $td = ($row == $rn ? 'th' : 'td');
+                    $out .= ($i == 0 ? '<tr>' : '') . "<{$td}>{$cell[$i]}</{$td}>";
+                    if ($i == $numcols - 1)
+                        $out .= "</tr>\n";
+                }
+            }
+        }
+        $out .= "</table>\n";
+        return $out;
+    }
 
-	private function table_div(array $cells, ?bool $th = false) {
-		//Table rows
-		//$numrows = count($cells);
-		//Table columns
-		$numcols = count($cells[0]) > 1 ? count($cells[0]) : count($cells[1]);
-		if ($this->className)
-			$class = " {$this->className}";
-		$out = "<div class='table{$class}'>\n";
-		$rn = 0;
-		foreach ($cells as $row => $cell) {
-			if (count($cell) == 1) {
-				$out .= "<div class='caption'>{$cell[0]}</div>";
-				$rn = 1;
-			} else {
-				for ($i = 0; $i < $numcols; $i++) {
-					$td = 'td';
-					if ($th)
-						$td = ($row == $rn ? 'th' : 'td');
-					$out .= ($i == 0 ? '<div class="tr">' : '') . "<div class='{$td}'>{$cell[$i]}</div>";
-					if ($i == $numcols - 1)
-						$out .= "</div>\n";
-				}
-			}
-		}
-		$out .= "</div>\n";
-		return $out;
-	}
+    private function table_div(array $cells, ?bool $th = false) {
+        //Table rows
+        //$numrows = count($cells);
+        //Table columns
+        $numcols = count($cells[0]) > 1 ? count($cells[0]) : count($cells[1]);
+        if ($this->className)
+            $class = " {$this->className}";
+        $out = "<div class='table{$class}'>\n";
+        $rn = 0;
+        foreach ($cells as $row => $cell) {
+            if (count($cell) == 1) {
+                $out .= "<div class='caption'>{$cell[0]}</div>";
+                $rn = 1;
+            } else {
+                for ($i = 0; $i < $numcols; $i++) {
+                    $td = 'td';
+                    if ($th)
+                        $td = ($row == $rn ? 'th' : 'td');
+                    $out .= ($i == 0 ? '<div class="tr">' : '') . "<div class='{$td}'>{$cell[$i]}</div>";
+                    if ($i == $numcols - 1)
+                        $out .= "</div>\n";
+                }
+            }
+        }
+        $out .= "</div>\n";
+        return $out;
+    }
 
 }
