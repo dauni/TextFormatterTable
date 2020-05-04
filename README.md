@@ -1,4 +1,4 @@
-#Textformatter Table
+# Textformatter Table
 This is a Textformatter for the [ProcessWire CMS](https://www.processwire.com). It will take text between TABLE-- --TABLE and surround it with table-tags or div-tags with a table-class. Newlines will become rows. Columns will generated with |. If the first line has no columns, it will be a caption.
 
 ```
