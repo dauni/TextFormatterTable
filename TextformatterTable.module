@@ -169,8 +169,7 @@ class TextformatterTable extends Textformatter implements ConfigurableModule {
         //$numrows = count($cells);
         //Table columns
         $numcols = count($cells[0]) > 1 ? count($cells[0]) : count($cells[1]);
-        if ($this->className)
-            $class = " class='{$this->className}'";
+        $class = $this->className ? " class='{$this->className}'" : "";
         $out = "<table{$class}>\n";
         $rn = 0;
         foreach ($cells as $row => $cell) {
