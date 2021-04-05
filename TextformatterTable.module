@@ -31,7 +31,7 @@ class TextformatterTable extends Textformatter implements ConfigurableModule {
         return array(
             'title' => 'Simple Tables Text Formatter',
             'summary' => 'Replaces CSV-Like strings with tables',
-            'version' => '1',
+            'version' => '2',
             'author' => 'Daniel Pichler',
             'icon' => 'table',
             'requires' => array('ProcessWire>=3.0.0', 'PHP>=7.2.0')
