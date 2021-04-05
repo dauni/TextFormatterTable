@@ -4,9 +4,9 @@ This is a Textformatter for the [ProcessWire CMS](https://www.processwire.com). 
 ## Usage
 
 ```
-TABLE---Sample Table
+TABLE--Sample Table
 Head1|Head2|Head3
-Cell1|Cell2|Cell3---TABLE
+Cell1|Cell2|Cell3--TABLE
 ```
 will become
 ```html
@@ -18,9 +18,9 @@ will become
 ```
 and
 ```
-TABLE---Sample Table
-TH---Head1|Head2|Head3
-Cell1|Cell2|Cell3---TABLE
+TABLE--Sample Table
+TH--Head1|Head2|Head3
+Cell1|Cell2|Cell3--TABLE
 ```
 will become
 ```html
@@ -37,8 +37,8 @@ TABLE--EXT---1234--TABLE
 ```
 where 1234 is the ID of your page or repeater which holds the table data in the format shown below, and the textformatter will output the table 
 ```
-TABLE---Sample Table
-TH---Head1|Head2|Head3
-Cell1|Cell2|Cell3---TABLE
+TABLE--Sample Table
+TH--Head1|Head2|Head3
+Cell1|Cell2|Cell3--TABLE
 ```
 If the page or the repeater containing the table-data are hidden, the table will not be displayed and a log entry will be created with the page-ids of the involved pages.
